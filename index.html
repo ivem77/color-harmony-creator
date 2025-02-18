@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Palette Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Color Palette Generator</h1>
+            <button class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="sun">☀️</span>
+                <span class="moon">🌙</span>
+            </button>
+        </header>
+
+        <main class="app-grid">
+            <section class="color-picker-section">
+                <h2>Base Color</h2>
+                <div class="color-picker-container">
+                    <div class="color-picker-wrapper">
+                        <div class="color-picker" id="colorPicker">
+                            <div class="color-picker-cursor"></div>
+                        </div>
+                        <input type="range" class="hue-slider" id="hueSlider" min="0" max="360" value="120">
+                    </div>
+                </div>
+            </section>
+
+            <section class="harmony-section">
+                <h2>Color Harmony</h2>
+                <nav class="harmony-nav">
+                    <button class="harmony-btn active" data-harmony="monochromatic">Monochromatic</button>
+                    <button class="harmony-btn" data-harmony="analogous">Analogous</button>
+                    <button class="harmony-btn" data-harmony="complementary">Complementary</button>
+                    <button class="harmony-btn" data-harmony="triadic">Triadic</button>
+                    <button class="harmony-btn" data-harmony="split-complementary">Split Complementary</button>
+                </nav>
+
+                <div class="harmony-display">
+                    <div class="harmony-wheel">
+                        <canvas id="colorWheel" width="300" height="300"></canvas>
+                        <div class="harmony-lines"></div>
+                        <div class="harmony-dots"></div>
+                    </div>
+                    <div class="palette-display">
+                        <!-- Generated palette will be inserted here -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="colorUtils.js"></script>
+    <script src="colorWheel.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
