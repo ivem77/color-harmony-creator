@@ -1,11 +1,13 @@
+/* Import DM Mono font */
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
+
 :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f5f5f5;
-    --text-primary: #333333;
+    --bg-primary: #F0EEEE;
+    --bg-secondary: #ffffff;
+    --text-primary: #000000;
     --text-secondary: #666666;
-    --accent: #1a73e8;
-    --border: #e0e0e0;
-    --shadow: rgba(0, 0, 0, 0.1);
+    --accent: #000000;
+    --border: #000000;
 }
 
 [data-theme="dark"] {
@@ -13,9 +15,7 @@
     --bg-secondary: #2d2d2d;
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
-    --accent: #4d9fff;
     --border: #404040;
-    --shadow: rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -25,7 +25,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'DM Mono', monospace;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: background-color 0.3s, color 0.3s;
@@ -45,14 +45,12 @@ header {
 }
 
 .theme-toggle {
-    background: var(--bg-secondary);
-    border: 1px solid var(--border);
-    border-radius: 20px;
     padding: 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    border: 0;
 }
 
 .app-grid {
@@ -70,9 +68,9 @@ header {
 .color-picker-section,
 .harmony-section {
     background: var(--bg-secondary);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px var(--shadow);
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    padding: 2.5rem;
 }
 
 .color-picker-container {
@@ -98,6 +96,7 @@ header {
     width: 100%;
     height: 20px;
     -webkit-appearance: none;
+    appearance: none;
     background: linear-gradient(to right,
         #ff0000 0%,
         #ffff00 17%,
@@ -136,23 +135,31 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin: 1.5rem -2.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
 }
 
 .harmony-btn {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg-primary);
+    padding: 0.5rem;
     color: var(--text-primary);
     cursor: pointer;
     transition: all 0.2s;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    border: 0;
+    background: transparent;
 }
 
 .harmony-btn.active {
-    background: var(--accent);
+    background: black;
     color: white;
-    border-color: var(--accent);
+}
+
+[data-theme="dark"] .harmony-btn.active {
+    background: white;
+    color: black;
 }
 
 .harmony-display {
@@ -236,4 +243,12 @@ header {
 .swatch-info {
     display: grid;
     gap: 0.25rem;
+    font-size: 0.85rem;
+}
+
+h2 {
+    text-transform: uppercase;
+    font-size: 1.3rem;
+    letter-spacing: 0.25em;
+    font-weight: 500;
 } 
