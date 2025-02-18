@@ -11,11 +11,11 @@
 }
 
 [data-theme="dark"] {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
+    --bg-primary: #000000;
+    --bg-secondary: #171719;
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
-    --border: #404040;
+    --border: #666666;
 }
 
 * {
@@ -41,7 +41,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
 }
 
 .theme-toggle {
@@ -50,7 +51,8 @@ header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    border: 0;
+    border: 1px solid var(--border);
+    border-radius: 24px;
 }
 
 .app-grid {
@@ -61,7 +63,7 @@ header {
 
 @media (min-width: 768px) {
     .app-grid {
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: fit-content(100%) 1fr;
     }
 }
 
@@ -75,8 +77,10 @@ header {
 
 .color-picker-container {
     aspect-ratio: auto;
+    padding: 2.5rem;
     position: relative;
-    margin-top: 1rem;
+    margin: 1.5rem -2.5rem;
+    border-top: 1px solid var(--border);
 }
 
 .color-picker-wrapper {
@@ -87,7 +91,6 @@ header {
 .color-picker {
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 8px;
     position: relative;
     cursor: crosshair;
 }
@@ -95,6 +98,7 @@ header {
 .hue-slider {
     width: 100%;
     height: 20px;
+    margin-top: 10px;
     -webkit-appearance: none;
     appearance: none;
     background: linear-gradient(to right,
@@ -106,7 +110,6 @@ header {
         #ff00ff 83%,
         #ff0000 100%
     );
-    border-radius: 4px;
     cursor: pointer;
 }
 
@@ -164,15 +167,16 @@ header {
 
 .harmony-display {
     display: grid;
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 2rem;
     align-items: start;
 }
 
 .harmony-wheel {
     position: relative;
-    width: 100%;
+    width: 300px;
     aspect-ratio: 1;
+    margin: 0 auto;
 }
 
 .harmony-lines {
@@ -191,6 +195,10 @@ header {
     height: 1px;
     transform-origin: left center;
     border-top: 1px dashed rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .harmony-line {
+    border-top: 1px dashed rgba(255, 255, 255, 0.3);
 }
 
 #colorWheel {
@@ -221,23 +229,23 @@ header {
 
 .palette-display {
     display: grid;
-    gap: 1rem;
 }
 
 .color-swatch {
     display: grid;
-    grid-template-columns: 80px 1fr;
+    grid-template-columns: 32px 1fr;
     align-items: center;
     gap: 1rem;
-    padding: 0.5rem;
-    border-radius: 6px;
-    background: var(--bg-primary);
+    border-bottom: 1px dashed var(--border);
+}
+
+.color-swatch:last-child {
+    border-bottom: none;
 }
 
 .swatch-preview {
-    width: 100%;
-    height: 80px;
-    border-radius: 4px;
+    width: 32px;
+    height: 100px;
 }
 
 .swatch-info {
@@ -251,4 +259,9 @@ h2 {
     font-size: 1.3rem;
     letter-spacing: 0.25em;
     font-weight: 500;
+} 
+
+h1 {
+    font-size: 3rem;
+    font-weight: 400;
 } 
