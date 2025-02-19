@@ -31,7 +31,7 @@ class ColorPaletteGenerator {
         // Set initial cursor position
         this.updateCursorPosition();
         
-        this.activeHarmony = 'monochromatic';
+        this.activeHarmony = 'analogous';
         this.isDragging = false;
         this.updateColorPickerBackground();
         this.drawColorWheel();
@@ -215,19 +215,46 @@ class ColorPaletteGenerator {
                 <div class="color-swatch">
                     <div class="swatch-preview" style="background-color: ${hex}"></div>
                     <div class="swatch-info">
-                        <div>HEX: ${hex}</div>
-                        <div>RGB: ${r}, ${g}, ${b}</div>
-                        <div>HSL: ${Math.round(h)}°, ${Math.round(s)}%, ${Math.round(l)}%</div>
+                        <div class="color-value" data-value="${hex}">HEX<span>${hex}</span></div>
+                        <div class="color-value" data-value="rgb(${r}, ${g}, ${b})">RGB<span>rgb(${r},${g},${b})</span></div>
+                        <div class="color-value" data-value="hsl(${Math.round(h)}, ${Math.round(s)}%, ${Math.round(l)}%)">HSL<span>hsl(${Math.round(h)},${Math.round(s)}%,${Math.round(l)}%)</span></div>
                     </div>
                 </div>
             `;
         }).join('');
         this.updateHarmonyDots();
+        
+        // Add click handlers for copying
+        document.querySelectorAll('.color-value').forEach(el => {
+            el.addEventListener('click', () => {
+                navigator.clipboard.writeText(el.dataset.value);
+                
+                // Create and show tooltip
+                const tooltip = document.createElement('div');
+                tooltip.className = 'copied-tooltip';
+                tooltip.textContent = 'copied';
+                el.appendChild(tooltip);
+                
+                // Force reflow to trigger animation
+                tooltip.offsetHeight;
+                tooltip.classList.add('show');
+                
+                // Remove tooltip after animation
+                setTimeout(() => {
+                    tooltip.remove();
+                }, 1000);
+            });
+        });
     }
 
     updateActiveButton() {
         this.harmonyButtons.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.harmony === this.activeHarmony);
+        });
+        
+        // Update description
+        document.querySelectorAll('.harmony-description .description').forEach(desc => {
+            desc.classList.toggle('active', desc.classList.contains(this.activeHarmony));
         });
     }
 
