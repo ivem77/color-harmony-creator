@@ -36,14 +36,14 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     margin-top: 1rem;
 }
 
@@ -130,25 +130,27 @@ header {
     background: var(--bg-secondary);
     border-radius: 24px;
     border: 1px solid var(--border);
-    padding: 2.5rem;
+    padding: 1.5rem;
     height: fit-content;
 }
 
 .color-picker-section {
-    width: fit-content;
+    width: 100%;
 }
 
 .color-picker-container {
     aspect-ratio: auto;
-    padding: 2.5rem 2.5rem 0 2.5rem;
+    padding: 1.5rem 1.5rem 0 1.5rem;
     position: relative;
-    margin: 1.5rem -2.5rem 0;
+    margin: 1.5rem -1.5rem 0;
     border-top: 1px solid var(--border);
 }
 
 .color-picker-wrapper {
     display: grid;
     gap: 0.5rem;
+    max-width: 300px;
+    margin: 0 auto;
 }
 
 .color-picker {
@@ -200,11 +202,11 @@ header {
 .harmony-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    margin: 1.5rem -2.5rem;
+    gap: 1rem;
+    margin: 1.5rem -1.5rem;
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem;
+    padding: 1rem;
 }
 
 .harmony-btn {
@@ -213,7 +215,7 @@ header {
     cursor: pointer;
     transition: all 0.2s;
     font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     border: 0;
     background: transparent;
 }
@@ -230,7 +232,7 @@ header {
 
 .harmony-display {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
     align-items: start;
     margin-top: 2.5rem;
@@ -244,7 +246,8 @@ header {
 
 .harmony-wheel {
     position: relative;
-    width: 300px;
+    width: 100%;
+    max-width: 300px;
     aspect-ratio: 1;
     margin: 0 auto;
     flex-shrink: 0;
@@ -300,7 +303,7 @@ header {
 
 .palette-display {
     display: grid;
-    padding: 0 2.5rem;
+    padding: 0 1rem;
 }
 
 .color-swatch {
@@ -373,14 +376,14 @@ h2 {
     letter-spacing: 0.25em;
     font-weight: 500;
     font-family: 'DM Sans', sans-serif;
-} 
+}
 
 h1 {
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: 400;
     font-family: 'DM Sans', sans-serif;
     letter-spacing: -0.02em;
-} 
+}
 
 .harmony-description {
     padding: 1rem;
@@ -412,4 +415,66 @@ h1 {
 .harmony-description .description.active {
     display: block;
     opacity: 1;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 2rem;
+    }
+    
+    header {
+        margin-bottom: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .harmony-display {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 768px) {
+    .harmony-nav {
+        gap: 1.5rem;
+        margin: 1.5rem -2.5rem;
+        padding: 1rem 2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .palette-display {
+        padding: 0 2.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .color-picker-container {
+        padding: 2.5rem 2.5rem 0 2.5rem;
+        margin: 1.5rem -2.5rem 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .harmony-btn {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .color-picker-section,
+    .harmony-section {
+        padding: 2.5rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .color-picker-section {
+        width: fit-content;
+    }
+}
+
+@media (min-width: 768px) {
+    .color-picker-wrapper {
+        margin: 0;
+    }
 } 
