@@ -107,18 +107,25 @@ class ColorWheel {
 
         const updateColor = (e) => {
             const rect = this.canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left - this.centerX;
-            const y = e.clientY - rect.top - this.centerY;
+            // Get coordinates from either mouse or touch event
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
             
             // Calculate distance from center
-            const distance = Math.sqrt(x * x + y * y);
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
             
-            // Only update if click is within the wheel
+            // Only update if within the wheel radius
             if (distance <= this.radius) {
-                let angle = Math.atan2(y, x) * 180 / Math.PI;
-                if (angle < 0) angle += 360;
+                // Calculate angle
+                const angle = Math.atan2(y - centerY, x - centerX);
+                this.selectedHue = ((angle * 180 / Math.PI) + 90) % 360;
+                if (this.selectedHue < 0) this.selectedHue += 360;
                 
-                this.selectedHue = angle;
                 this.draw();
                 this.options.onColorChange({
                     h: this.selectedHue,
@@ -128,6 +135,7 @@ class ColorWheel {
             }
         };
 
+        // Mouse events
         this.canvas.addEventListener('mousedown', (e) => {
             isDragging = true;
             updateColor(e);
@@ -138,6 +146,24 @@ class ColorWheel {
         });
 
         document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        // Touch events
+        this.canvas.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            e.preventDefault();  // Prevent scrolling
+            updateColor(e);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                e.preventDefault();  // Prevent scrolling
+                updateColor(e);
+            }
+        });
+
+        document.addEventListener('touchend', () => {
             isDragging = false;
         });
 
