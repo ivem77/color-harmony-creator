@@ -76,7 +76,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 0 8px;
 }
 
 .toggle-track::before {
@@ -92,7 +92,7 @@ header {
 }
 
 [data-theme="dark"] .toggle-track::before {
-    transform: translateX(40px);
+    transform: translateX(36px);
 }
 
 .light-icon,
