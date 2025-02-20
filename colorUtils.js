@@ -70,37 +70,42 @@ class ColorUtils {
             .join('');
     }
 
-    static getHarmony(h, s, l, type) {
+    static getHarmonyAngles(type) {
         switch (type) {
-            case 'monochromatic':
-                return [
-                    [h, s, l],
-                    [h, s, Math.max(0, l - 30)],
-                    [h, s, Math.min(100, l + 30)]
-                ];
             case 'analogous':
-                return [
-                    [h, s, l],
-                    [(h + 30) % 360, s, l],
-                    [(h - 30 + 360) % 360, s, l]
-                ];
+                return [-30, 0, 30];
             case 'complementary':
-                return [
-                    [h, s, l],
-                    [(h + 180) % 360, s, l]
-                ];
+                return [0, 180];
             case 'triadic':
-                return [
-                    [h, s, l],
-                    [(h + 120) % 360, s, l],
-                    [(h + 240) % 360, s, l]
-                ];
+                return [0, 120, 240];
             case 'split-complementary':
-                return [
-                    [h, s, l],
-                    [(h + 150) % 360, s, l],
-                    [(h + 210) % 360, s, l]
-                ];
+                return [0, 150, 210];
+            case 'tetradic':
+                return [0, 90, 180, 270];  // Rectangle/double complementary
+            case 'monochromatic':
+                return [0];
+            default:
+                return [0];
         }
+    }
+
+    static getHarmonyColors(hue, saturation, lightness, type) {
+        const angles = this.getHarmonyAngles(type);
+        
+        if (type === 'monochromatic') {
+            return [
+                [hue, saturation, lightness],
+                [hue, saturation, Math.max(20, lightness - 30)],
+                [hue, Math.max(20, saturation - 30), lightness],
+                [hue, saturation, Math.min(80, lightness + 30)],
+                [hue, Math.min(100, saturation + 30), lightness]
+            ];
+        }
+
+        return angles.map(angle => {
+            let h = (hue + angle) % 360;
+            if (h < 0) h += 360;
+            return [h, saturation, lightness];
+        });
     }
 } 

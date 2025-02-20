@@ -8,66 +8,73 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Color Palette Generator</h1>
-            <button class="theme-toggle" aria-label="Toggle dark mode">
-                <div class="toggle-track">
-                    <img src="icons/light.svg" alt="Light mode" class="light-icon">
-                    <img src="icons/dark.svg" alt="Dark mode" class="dark-icon">
-                </div>
-            </button>
-        </header>
-
         <main class="app-grid">
-            <section class="color-picker-section">
-                <h2>Base Color</h2>
-                <div class="color-picker-container">
-                    <div class="color-picker-wrapper">
-                        <div class="color-picker" id="colorPicker">
-                            <div class="color-picker-cursor"></div>
-                        </div>
-                        <input type="range" class="hue-slider" id="hueSlider" min="0" max="360" value="120">
-                    </div>
-                </div>
-            </section>
-
             <section class="harmony-section">
-                <h2>Color Harmony</h2>
+                <div class="section-header">
+                    <h1>Color Harmony Creator</h1>
+                    <button class="theme-toggle" aria-label="Toggle dark mode">
+                        <div class="toggle-track">
+                            <img src="icons/light.svg" alt="Light mode" class="light-icon">
+                            <img src="icons/dark.svg" alt="Dark mode" class="dark-icon">
+                        </div>
+                    </button>
+                </div>
                 <nav class="harmony-nav">
                     <button class="harmony-btn active" data-harmony="analogous">Analogous</button>
                     <button class="harmony-btn" data-harmony="complementary">Complementary</button>
                     <button class="harmony-btn" data-harmony="triadic">Triadic</button>
                     <button class="harmony-btn" data-harmony="split-complementary">Split Complementary</button>
+                    <button class="harmony-btn" data-harmony="tetradic">Tetradic</button>
                     <button class="harmony-btn" data-harmony="monochromatic">Monochromatic</button>
                 </nav>
 
                 <div class="harmony-display">
+                    <div class="harmony-description">
+                        <div class="description analogous active">
+                            <h2>Analogous Harmony</h2>
+                            <p>These three neighboring colors on the color wheel work together naturally. The middle color leads the composition, while its neighbors add depth and interest. Like watching colors shift in a sunset, analogous colors create visual flow that feels effortless and harmonious.</p>
+                        </div>
+                        <div class="description complementary">
+                            <h2>Complementary Harmony</h2>
+                            <p>Meet the power couple of color theory. Sitting opposite each other on the color wheel, these two colors create instant chemistry through maximum contrast. Each color makes its partner appear more vibrant and alive.</p>
+                        </div>
+                        <div class="description triadic">
+                            <h2>Triadic Harmony</h2>
+                            <p>Spaced evenly at 120 degrees around the color wheel, three colors unite to create balanced energy. Like a perfect triangle, triadic colors offer stability with a creative twist. This harmony mixes warm and cool tones while maintaining clear relationships between colors.</p>
+                        </div>
+                        <div class="description split-complementary">
+                            <h2>Split-Complementary Harmony</h2>
+                            <p>Take a base color, look across the wheel to its complement, then step one color to each side – that's split-complementary. This arrangement delivers the punch of complementary colors but feels more sophisticated and flexible.</p>
+                        </div>
+                        <div class="description tetradic">
+                            <h2>Tetradic Harmony</h2>
+                            <p>Also known as double complementary, this scheme uses four colors arranged into two complementary pairs. Like a rectangle on the color wheel, tetradic harmony offers rich, dynamic possibilities while maintaining balance through symmetry. Perfect for designs that need variety and sophistication.</p>
+                        </div>
+                        <div class="description monochromatic">
+                            <h2>Monochromatic Harmony</h2>
+                            <p>One color tells many stories through its range of light and dark values. Monochromatic schemes explore a single hue's full potential – from its boldest form to its subtlest whisper. By playing with saturation and brightness, this harmony creates depth while maintaining perfect unity.</p>
+                        </div>
+                    </div>
                     <div class="harmony-display-left">
                         <div class="harmony-wheel">
                             <canvas id="colorWheel" width="300" height="300"></canvas>
                             <div class="harmony-lines"></div>
                             <div class="harmony-dots"></div>
                         </div>
-                        <div class="harmony-description">
-                            <div class="description analogous">
-                                <h3>Analogous Harmony</h3>
-                                <p>These three neighboring colors on the color wheel work together naturally. The middle color leads the composition, while its neighbors add depth and interest. Like watching colors shift in a sunset, analogous colors create visual flow that feels effortless and harmonious. Nature frequently showcases these combinations in landscapes, flora, and changing seasons.</p>
+                        <div class="sl-sliders">
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Saturation</span>
+                                    <span class="slider-value" id="saturationValue">100%</span>
+                                </div>
+                                <input type="range" class="sl-slider" id="saturationSlider" min="0" max="100" value="100">
                             </div>
-                            <div class="description complementary">
-                                <h3>Complementary Harmony</h3>
-                                <p>Meet the power couple of color theory. Sitting opposite each other on the color wheel, these two colors create instant chemistry through maximum contrast. Each color makes its partner appear more vibrant and alive. Complementary pairs combine warm and cool colors, bringing perfect temperature balance to designs. Red makes green pop, blue energizes orange, and purple amplifies yellow.</p>
-                            </div>
-                            <div class="description triadic">
-                                <h3>Triadic Harmony</h3>
-                                <p>Spaced evenly at 120 degrees around the color wheel, three colors unite to create balanced energy. Like a perfect triangle, triadic colors offer stability with a creative twist. This harmony mixes warm and cool tones while maintaining clear relationships between colors. When one color takes the lead and two play supporting roles, triadic schemes really shine.</p>
-                            </div>
-                            <div class="description split-complementary">
-                                <h3>Split-Complementary Harmony</h3>
-                                <p>Take a base color, look across the wheel to its complement, then step one color to each side – that's split-complementary. This arrangement delivers the punch of complementary colors but feels more sophisticated and flexible. It creates strong visual interest while being surprisingly easy to balance. Think of it as complementary harmony's more versatile cousin.</p>
-                            </div>
-                            <div class="description monochromatic">
-                                <h3>Monochromatic Harmony</h3>
-                                <p>One color tells many stories through its range of light and dark values. Monochromatic schemes explore a single hue's full potential – from its boldest form to its subtlest whisper. By playing with saturation and brightness, this harmony creates depth while maintaining perfect unity. Every variation shares the same temperature, creating a cohesive visual experience.</p>
+                            <div class="slider-group">
+                                <div class="slider-label">
+                                    <span>Lightness</span>
+                                    <span class="slider-value" id="lightnessValue">50%</span>
+                                </div>
+                                <input type="range" class="sl-slider" id="lightnessSlider" min="0" max="100" value="50">
                             </div>
                         </div>
                     </div>
