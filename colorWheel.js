@@ -36,14 +36,18 @@ class ColorWheel {
         this.ctx.imageSmoothingEnabled = true;
         this.ctx.imageSmoothingQuality = 'high';
         
+        const innerRadius = this.radius * 0.75;  // Inner radius at 75% of outer radius
+        
         // Draw color wheel with current saturation and lightness
         for (let angle = 0; angle < 360; angle++) {
             const startAngle = (angle - 2) * Math.PI / 180;
             const endAngle = (angle + 2) * Math.PI / 180;
 
             this.ctx.beginPath();
-            this.ctx.moveTo(this.centerX, this.centerY);
+            // Draw outer arc
             this.ctx.arc(this.centerX, this.centerY, this.radius, startAngle, endAngle);
+            // Draw inner arc in counter-clockwise direction
+            this.ctx.arc(this.centerX, this.centerY, innerRadius, endAngle, startAngle, true);
             this.ctx.closePath();
 
             const hue = angle;
@@ -66,11 +70,35 @@ class ColorWheel {
         // Clear and redraw the wheel without dots
         this.draw(true);  // Pass true to skip dots
 
+        // Get the current border color from CSS variable
+        const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border');
+
+        // Draw dashed lines first so they appear behind dots
         angles.forEach(angleOffset => {
             const hue = (this.selectedHue + angleOffset) % 360;
             const angle = hue * Math.PI / 180;
-            const x = this.centerX + Math.cos(angle) * (this.radius * 0.8);
-            const y = this.centerY + Math.sin(angle) * (this.radius * 0.8);
+            const dotRadius = this.radius * 0.875;
+            const x = this.centerX + Math.cos(angle) * dotRadius;
+            const y = this.centerY + Math.sin(angle) * dotRadius;
+
+            // Draw dashed line from center to dot
+            this.ctx.beginPath();
+            this.ctx.setLineDash([4, 4]);  // Create dashed line pattern
+            this.ctx.moveTo(this.centerX, this.centerY);
+            this.ctx.lineTo(x, y);
+            this.ctx.strokeStyle = borderColor;  // Use border color from CSS variable
+            this.ctx.lineWidth = 1;
+            this.ctx.stroke();
+            this.ctx.setLineDash([]);  // Reset to solid line
+        });
+
+        // Draw dots on top of the lines
+        angles.forEach(angleOffset => {
+            const hue = (this.selectedHue + angleOffset) % 360;
+            const angle = hue * Math.PI / 180;
+            const dotRadius = this.radius * 0.875;
+            const x = this.centerX + Math.cos(angle) * dotRadius;
+            const y = this.centerY + Math.sin(angle) * dotRadius;
 
             // Draw dot shadow
             this.ctx.beginPath();
@@ -104,27 +132,46 @@ class ColorWheel {
 
     setupEventListeners() {
         let isDragging = false;
+        let isClickingDot = false;
 
         const updateColor = (e) => {
             const rect = this.canvas.getBoundingClientRect();
-            // Get coordinates from either mouse or touch event
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             
             const x = clientX - rect.left;
             const y = clientY - rect.top;
             
-            // Calculate distance from center
+            // Check if clicking on a dot
+            const angles = ColorUtils.getHarmonyAngles(this.harmonyType);
+            for (const angleOffset of angles) {
+                const hue = (this.selectedHue + angleOffset) % 360;
+                const angle = hue * Math.PI / 180;
+                const dotRadius = this.radius * 0.875;
+                const dotX = this.centerX + Math.cos(angle) * dotRadius;
+                const dotY = this.centerY + Math.sin(angle) * dotRadius;
+                
+                const distToDot = Math.sqrt((x - dotX) ** 2 + (y - dotY) ** 2);
+                if (distToDot <= 16) {
+                    isClickingDot = true;
+                    return;
+                }
+            }
+            
+            // Improved angle calculation
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
             const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
             
-            // Only update if within the wheel radius
-            if (distance <= this.radius) {
-                // Calculate angle
-                const angle = Math.atan2(y - centerY, x - centerX);
-                this.selectedHue = ((angle * 180 / Math.PI) + 90) % 360;
-                if (this.selectedHue < 0) this.selectedHue += 360;
+            if (distance <= this.radius && !isClickingDot) {
+                // Calculate angle in radians, then convert to degrees
+                let angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI);
+                
+                // Normalize angle to 0-360 range
+                angle = (angle + 90) % 360;  // Rotate by 90 degrees so 0 is at the top
+                if (angle < 0) angle += 360;
+                
+                this.selectedHue = angle;
                 
                 this.draw();
                 this.options.onColorChange({
@@ -135,39 +182,53 @@ class ColorWheel {
             }
         };
 
-        // Mouse events
+        // Mouse events with improved handling
         this.canvas.addEventListener('mousedown', (e) => {
             isDragging = true;
+            isClickingDot = false;
             updateColor(e);
         });
 
         document.addEventListener('mousemove', (e) => {
-            if (isDragging) updateColor(e);
+            if (isDragging) {
+                isClickingDot = false;
+                updateColor(e);
+                e.preventDefault(); // Prevent unwanted selections while dragging
+            }
         });
 
         document.addEventListener('mouseup', () => {
             isDragging = false;
+            isClickingDot = false;
         });
 
-        // Touch events
+        // Touch events with improved handling
         this.canvas.addEventListener('touchstart', (e) => {
             isDragging = true;
-            e.preventDefault();  // Prevent scrolling
+            isClickingDot = false;
+            e.preventDefault();
             updateColor(e);
         });
 
         document.addEventListener('touchmove', (e) => {
             if (isDragging) {
-                e.preventDefault();  // Prevent scrolling
+                isClickingDot = false;
+                e.preventDefault();
                 updateColor(e);
             }
         });
 
         document.addEventListener('touchend', () => {
             isDragging = false;
+            isClickingDot = false;
         });
 
-        this.canvas.addEventListener('click', updateColor);
+        // Single click handling
+        this.canvas.addEventListener('click', (e) => {
+            if (!isClickingDot) {
+                updateColor(e);
+            }
+        });
     }
 
     updateSL(saturation, lightness) {

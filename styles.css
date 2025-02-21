@@ -17,7 +17,7 @@
     --bg-secondary: #171719;
     --text-primary: #ffffff;
     --text-secondary: #cccccc;
-    --border: #666666;
+    --border: #979797;
 }
 
 * {
@@ -326,7 +326,7 @@ header {
 }
 
 .swatch-preview {
-    width: 32px;
+    width: 20px;
     height: 100px;
 }
 

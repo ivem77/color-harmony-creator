@@ -70,6 +70,10 @@ class ColorPaletteGenerator {
             
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
+
+            // Redraw the color wheel to update dashed lines
+            this.colorWheel.draw();
+            this.colorWheel.drawHarmonyDots(this.activeHarmony);
         });
     }
 
