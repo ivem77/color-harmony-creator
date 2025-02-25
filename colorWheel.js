@@ -24,8 +24,14 @@ class ColorWheel {
             onColorChange: options.onColorChange || (() => {}),
         };
 
+        // Make canvas focusable for keyboard navigation
+        this.canvas.tabIndex = 0;
+        this.canvas.setAttribute('role', 'application');
+        this.canvas.setAttribute('aria-label', 'Color wheel. Use arrow keys to change hue.');
+
         this.draw();
         this.setupEventListeners();
+        this.setupResizeHandler();
     }
 
     draw(skipDots = false) {
@@ -133,6 +139,31 @@ class ColorWheel {
     setupEventListeners() {
         let isDragging = false;
         let isClickingDot = false;
+
+        // Add keyboard event handling
+        this.canvas.addEventListener('keydown', (e) => {
+            // Arrow keys to change hue
+            if (e.key === 'ArrowRight') {
+                this.selectedHue = (this.selectedHue + 1) % 360;
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft') {
+                this.selectedHue = (this.selectedHue - 1 + 360) % 360;
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                this.selectedHue = (this.selectedHue - 10 + 360) % 360;
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                this.selectedHue = (this.selectedHue + 10) % 360;
+                e.preventDefault();
+            }
+
+            this.draw();
+            this.options.onColorChange({
+                h: this.selectedHue,
+                s: this.saturation,
+                l: this.lightness
+            });
+        });
 
         const updateColor = (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -248,5 +279,40 @@ class ColorWheel {
             s: this.saturation,
             l: this.lightness
         };
+    }
+
+    setupResizeHandler() {
+        // Use ResizeObserver if available
+        if (window.ResizeObserver) {
+            this.resizeObserver = new ResizeObserver(this.handleResize.bind(this));
+            this.resizeObserver.observe(this.canvas);
+        } else {
+            // Fallback to window resize event
+            window.addEventListener('resize', () => {
+                clearTimeout(this.resizeTimer);
+                this.resizeTimer = setTimeout(() => this.handleResize(), 100);
+            });
+        }
+    }
+
+    handleResize() {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = this.canvas.getBoundingClientRect();
+        
+        this.canvas.width = rect.width * dpr;
+        this.canvas.height = rect.height * dpr;
+        this.canvas.style.width = `${rect.width}px`;
+        this.canvas.style.height = `${rect.height}px`;
+        
+        this.ctx.scale(dpr, dpr);
+        
+        this.radius = rect.width / 2;
+        this.centerX = this.radius;
+        this.centerY = this.radius;
+        
+        this.draw();
+        if (this.harmonyType) {
+            this.drawHarmonyDots(this.harmonyType);
+        }
     }
 } 

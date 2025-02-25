@@ -1,5 +1,10 @@
 class ColorUtils {
     static rgbToHsl(r, g, b) {
+        // Validate RGB values
+        r = Math.max(0, Math.min(255, r));
+        g = Math.max(0, Math.min(255, g));
+        b = Math.max(0, Math.min(255, b));
+
         r /= 255;
         g /= 255;
         b /= 255;
@@ -31,6 +36,11 @@ class ColorUtils {
     }
 
     static hslToRgb(h, s, l) {
+        // Validate HSL values
+        h = Math.max(0, Math.min(360, h)) % 360;
+        s = Math.max(0, Math.min(100, s));
+        l = Math.max(0, Math.min(100, l));
+
         h /= 360;
         s /= 100;
         l /= 100;

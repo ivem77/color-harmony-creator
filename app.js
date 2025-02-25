@@ -3,6 +3,7 @@ class ColorPaletteGenerator {
         this.initElements();
         this.initColorWheel();
         this.initEventListeners();
+        this.initThemeDetection();
         this.activeHarmony = 'analogous';
         this.updatePalette();
         
@@ -77,6 +78,28 @@ class ColorPaletteGenerator {
         });
     }
 
+    initThemeDetection() {
+        // Check for system preference
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        
+        // If no saved preference, use system preference
+        if (!localStorage.getItem('theme')) {
+            const systemTheme = prefersDarkScheme.matches ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', systemTheme);
+        }
+        
+        // Listen for changes to the prefers-color-scheme media query
+        prefersDarkScheme.addEventListener('change', (mediaQuery) => {
+            const newTheme = mediaQuery.matches ? 'dark' : 'light';
+            // Only change if user hasn't set a preference
+            if (!localStorage.getItem('theme')) {
+                document.documentElement.setAttribute('data-theme', newTheme);
+                this.colorWheel.draw();
+                this.colorWheel.drawHarmonyDots(this.activeHarmony);
+            }
+        });
+    }
+
     updateSliderValues(color) {
         this.saturationSlider.value = color.s;
         this.lightnessSlider.value = color.l;
@@ -125,11 +148,18 @@ class ColorPaletteGenerator {
     }
 
     setupCopyHandlers() {
-        document.querySelectorAll('.color-value').forEach(el => {
-            el.addEventListener('click', () => {
-                navigator.clipboard.writeText(el.dataset.value);
-                this.showCopiedTooltip(el);
-            });
+        // Use event delegation instead of adding listeners to each element
+        this.paletteDisplay.addEventListener('click', (e) => {
+            const colorValue = e.target.closest('.color-value');
+            if (colorValue) {
+                navigator.clipboard.writeText(colorValue.dataset.value)
+                    .then(() => {
+                        this.showCopiedTooltip(colorValue);
+                    })
+                    .catch(err => {
+                        console.error('Could not copy text: ', err);
+                    });
+            }
         });
     }
 
