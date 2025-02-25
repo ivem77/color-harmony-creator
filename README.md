@@ -12,7 +12,7 @@ A responsive web application for generating color harmonies and palettes. Built 
   - Tetradic
   - Monochromatic       
 
-- **Color Picker**: Select colors from a vibrant color wheel or manually input RGB values.
+- **Color Picker**: Select colors from a vibrant color wheel and adjust the hue, saturation, and lightness.
 - **Harmony Display**: Visualize the harmony with a color wheel and harmony lines.
 - **Color Palette**: See the harmony in action with a color palette display.
 - **Responsive Design**: Works on all devices, from desktops to mobile phones.
